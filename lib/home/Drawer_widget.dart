@@ -109,7 +109,7 @@ class DrawerWidget extends StatelessWidget {
               DrawerTile(
                 function: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SettingsPage()));
+                      builder: (context) => ChangeAccountSettings()));
                 },
                 text: 'Account Settings',
                 icon: Icons.account_circle_sharp,
