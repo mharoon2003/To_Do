@@ -120,7 +120,7 @@ class DrawerWidget extends StatelessWidget {
               SizedBox(height: context.height * 0.009),
               DrawerTile(
                 function: () {},
-                text: 'Rate this app',
+                text: 'Rate this app!',
                 icon: Icons.star,
                 isSelected: false,
               ),
