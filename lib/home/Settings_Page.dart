@@ -1,102 +1,70 @@
-//Settings page
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
-
+class ChangeAccountSettings extends StatefulWidget {
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  State<ChangeAccountSettings> createState() => _ChangeAccountSettingsState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+class _ChangeAccountSettingsState extends State<ChangeAccountSettings> {
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController lastNameController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Load user data from some storage, for example:
-    // _emailController.text = currentUser.email;
-    // _firstNameController.text = currentUser.firstName;
-    // _lastNameController.text = currentUser.lastName;
+    loadUserData();
   }
 
-  void _saveSettings() {
-    // Code to handle saving the settings goes here.
-    print('Email: ${_emailController.text}');
-    print('Password: ${_passwordController.text}');
-    print('First Name: ${_firstNameController.text}');
-    print('Last Name: ${_lastNameController.text}');
-
-    // Show a snackbar or a dialog to confirm changes were saved.
-    Get.snackbar("Settings", "Changes have been saved.");
-  }
-
-  void _logout() {
-    // Logic to log out (e.g., clearing tokens or user data).
-    Get.offAllNamed('/login'); // Redirects to the login page
+  Future<void> loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    nameController.text = prefs.getString('name') ?? '';
+    lastNameController.text = prefs.getString('last_name') ?? '';
+    emailController.text = prefs.getString('email') ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text('Change Account Settings')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14))),
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'First Name'),
             ),
             TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15))),
+              controller: lastNameController,
+              decoration: InputDecoration(labelText: 'Last Name'),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextField(
-                  controller: _firstNameController,
-                  decoration: InputDecoration(
-                    labelText: 'First Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: _lastNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Last Name',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _saveSettings,
-              child: const Text('Save Settings'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _logout,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Logout'),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                // Update user data
+                prefs.setString('name', nameController.text);
+                prefs.setString('last_name', lastNameController.text);
+                prefs.setString('email', emailController.text);
+                // Optionally handle password update
+              },
+              child: Text('Save Changes'),
             ),
           ],
         ),
