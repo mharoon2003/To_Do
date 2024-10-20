@@ -318,14 +318,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.18.1"
-  firebase_phone_auth_handler:
-    dependency: "direct main"
-    description:
-      name: firebase_phone_auth_handler
-      sha256: a7097083f7131a6a51221438b373b85486c293dbcf9e19740968aa6ba306758d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   fixnum:
     dependency: transitive
     description:
