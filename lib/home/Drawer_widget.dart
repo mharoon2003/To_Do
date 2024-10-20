@@ -125,6 +125,7 @@ class DrawerWidget extends StatelessWidget {
                 isSelected: false,
               ),
               DrawerTile(
+
                 function: () {
                   Get.to(() => AboutPage());
                 },
