@@ -1,13 +1,9 @@
-//Splash Screen of the app
-
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_mangement_hive/home/Home_Page.dart';
+import 'package:task_mangement_hive/login_signup/Signin_page.dart';
 
-import 'Signin_page.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -17,7 +13,7 @@ class SplashScreen extends StatelessWidget {
     Timer(Duration(seconds: 3), () async {
       bool isLoggedIn = await checkLoginStatus();
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => isLoggedIn ? HomeView() : LoginPage()));
+          builder: (context) => isLoggedIn ? HomeView() : SigninPage()));
     });
 
     return Scaffold(
@@ -36,8 +32,9 @@ class SplashScreen extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            'Manage Your Tasks with this app ',
+            'Manage Your Tasks with This App',
             style: TextStyle(fontSize: 24, color: Colors.white),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
