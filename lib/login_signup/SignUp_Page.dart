@@ -1,19 +1,13 @@
-
-//Sign up page of the app
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_mangement_hive/home/Home_Page.dart';
 
-class SignUpPage extends StatefulWidget {
-  @override
-  State<SignUpPage> createState() => _SignUpPageState();
-}
+class SignupPage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,97 +15,43 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      labelText: 'Name'),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      labelText: 'Last Name'),
-                ),
-              ],
-            ),
-            SizedBox(
-              width: 6,
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'First Name'),
             ),
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            ),
-            SizedBox(
-              width: 6,
+              controller: lastNameController,
+              decoration: InputDecoration(labelText: 'Last Name'),
             ),
             TextField(
-                decoration: InputDecoration(
-
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                obscureText: true),
-            SizedBox(
-              width: 6,
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
             ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomeView()));
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                // Store user data
+                prefs.setBool('logged_in', true);
+                prefs.setString('name', nameController.text);
+                prefs.setString('last_name', lastNameController.text);
+                prefs.setString('email', emailController.text);
+                // Navigate to Home
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => HomeView()));
               },
               child: Text('Sign Up'),
             ),
-            SizedBox(
-              width: 6,
-            ),
-            TextButton(
-                child: Text('Continue with Google'),
-                onPressed: () {
-                  signInWithGoogle();
-                }),
-            SizedBox(
-              width: 6,
-            ),
-            TextButton(
-                child: Text('Continue with Facebook'),
-                onPressed: () {
-                  signInWithFacebook();
-                }),
           ],
         ),
       ),
     );
-  }
-
-  void signInWithGoogle() async {
-    GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signIn();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('logged_in', true);
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
-  }
-
-  void signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login();
-    if (result.status == LoginStatus.success) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('logged_in', true);
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
-    } else {
-      // Handle login error
-      print("Facebook login failed: ${result.status}");
-    }
   }
 }
