@@ -50,8 +50,7 @@ dependencies:
   flutter_facebook_auth: ^7.1.1
   omni_datetime_picker: ^2.0.5
   animated_background: ^2.0.0
-  firebase_phone_auth_handler: ^1.1.0
-  firebase_auth: ^5.3.1
+  firebase_auth: any
 
 dev_dependencies:
   flutter_test:
